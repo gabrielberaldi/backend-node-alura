@@ -1,25 +1,28 @@
 import express from "express";
+import db from "./config/db-connect.js";
+import livros from "./models/Livro.js";
+
+db.on("error", console.log.bind(console, 'Erro de conexão'));
+db.once("open", () => console.log('Conexão realizado com sucesso'));
 
 const app = express();
-
 app.use(express.json());
-
-const livros = [
-  {id: 1, titulo: 'Senhor dos aneis'},
-  {id: 2, titulo: 'Hobbit'}
-];
 
 app.get('/', (req, res) => {
   res.status(200).send('Curso de node');
 })
 
 app.get('/livros', (req, res) => {
-  res.status(200).json(livros);
+  livros.find((error, livros) => {
+    res.status(200).json(livros)
+  })
 })
 
 app.get('/livros/:id', (req, res) => {
-  const livro = buscarLivro(Number(req.params.id));
-  res.status(200).json(livros[livro]);
+  const id = req.params.id;
+  livros.findById(id, (error, livro) => {
+    res.status(200).json(livro);
+  })
 })
 
 app.post('/livros', (req, res) => {
