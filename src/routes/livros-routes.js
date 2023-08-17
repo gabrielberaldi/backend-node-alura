@@ -9,5 +9,6 @@ const router = express.Router();
 router.get("/livros", LivroController.obterLivros);
 router.get("/livros/:id", LivroController.obterLivroPorId);
 router.post("/livros", LivroController.cadastrarLivro);
+router.put("/livros/:id", LivroController.atualizarLivro);
 
 export default router;
