@@ -1,29 +1,16 @@
 import express from "express";
 import db from "./config/db-connect.js";
+import routes from "./routes/index.js";
 import livros from "./models/Livro.js";
 
 db.on("error", console.log.bind(console, 'Erro de conexão'));
 db.once("open", () => console.log('Conexão realizado com sucesso'));
 
 const app = express();
+
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.status(200).send('Curso de node');
-})
-
-app.get('/livros', (req, res) => {
-  livros.find((error, livros) => {
-    res.status(200).json(livros)
-  })
-})
-
-app.get('/livros/:id', (req, res) => {
-  const id = req.params.id;
-  livros.findById(id, (error, livro) => {
-    res.status(200).json(livro);
-  })
-})
+routes(app);
 
 app.post('/livros', (req, res) => {
   livros.push(...req.body);
